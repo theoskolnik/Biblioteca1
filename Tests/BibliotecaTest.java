@@ -7,6 +7,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class BibliotecaTest {
     private List<Book> books;
@@ -22,21 +23,26 @@ public class BibliotecaTest {
 
     @Test
     public  void listsOneBookOnStart(){
-        Book harryPotter = new Book("Harry Potter", "J.K. Rowling", "1997");
-        books.add(harryPotter);
+        Book book = mock(Book.class);
+        books.add(book);
         biblioteca.listBooks();
-        verify(printStream).println("Harry Potter\tJ.K. Rowling\t1997");
+        verify(printStream).println(book.getInformation());
     }
 
     @Test
     public void  listsMultipleBooksOnStart(){
-        Book harryPotter = new Book("Harry Potter", "J.K. Rowling", "1997");
-        Book lotr = new Book("Lord of the Rings", "J.R.R. Tolkien", "1982");
-        books.add(harryPotter);
-        books.add(lotr);
+        String bookInfo = "BookInfo";
+        Book book = mock(Book.class);
+        when(book.getInformation()).thenReturn("123");
+        Book book2 = mock(Book.class);
+        when(book2.getInformation()).thenReturn("456");
+        books.add(book);
+        books.add(book2);
+
         biblioteca.listBooks();
-        verify(printStream).println("Harry Potter\tJ.K. Rowling\t1997");
-        verify(printStream).println("Lord of the Rings\tJ.R.R. Tolkien\t1982");
+
+        verify(printStream).println(book.getInformation());
+        verify(printStream).println(book2.getInformation());
     }
 
 }

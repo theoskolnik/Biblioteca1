@@ -1,13 +1,17 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         PrintStream printStream = System.out;
-        new Application(createLibrary(printStream)).start();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
+        new Application(bufferedReader, printStream, createLibrary(printStream), new MainMenu()).start();
     }
 
     private static Biblioteca createLibrary(PrintStream printStream) {
