@@ -3,49 +3,40 @@ import org.junit.Test;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class BibliotecaTest {
-
-    private PrintStream printStream;
+    private List<Book> books;
     private Biblioteca biblioteca;
-    private ArrayList<String> books;
+    private PrintStream printStream;
 
     @Before
-    public void setUp() throws Exception {
-        books = new ArrayList<String>();
+    public void setUp() {
+        books = new ArrayList<Book>();
         printStream = mock(PrintStream.class);
         biblioteca = new Biblioteca(books, printStream);
     }
 
     @Test
-    public void testStart() throws Exception {
-        biblioteca.start();
-        verify(printStream).println("Welcome to Biblioteca");
-    }
-
-    @Test
-    public void listsBooksOnStart(){
-        biblioteca.listBooks();
-        verify(printStream, times(0)).println(anyString());
-    }
-
-    @Test
     public  void listsOneBookOnStart(){
-        books.add("Harry Potter");
+        Book harryPotter = new Book("Harry Potter", "J.K. Rowling", "1997");
+        books.add(harryPotter);
         biblioteca.listBooks();
-        verify(printStream).println("Harry Potter");
+        verify(printStream).println("Harry Potter\tJ.K. Rowling\t1997");
     }
 
     @Test
     public void  listsMultipleBooksOnStart(){
-        books.add("Lord of the Rings");
-        books.add("Harry Potter");
+        Book harryPotter = new Book("Harry Potter", "J.K. Rowling", "1997");
+        Book lotr = new Book("Lord of the Rings", "J.R.R. Tolkien", "1982");
+        books.add(harryPotter);
+        books.add(lotr);
         biblioteca.listBooks();
-        verify(printStream).println("Lord of the Rings");
-        verify(printStream).println("Harry Potter");
+        verify(printStream).println("Harry Potter\tJ.K. Rowling\t1997");
+        verify(printStream).println("Lord of the Rings\tJ.R.R. Tolkien\t1982");
     }
+
 }
