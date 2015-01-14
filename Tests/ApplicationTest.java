@@ -24,7 +24,7 @@ public class ApplicationTest {
         biblioteca = mock(Biblioteca.class);
         menu = mock(MainMenu.class);
         bufferedReader = mock(BufferedReader.class);
-        application = new Application(bufferedReader, printStream, biblioteca, menu);
+        application = new Application(printStream, biblioteca, menu);
     }
 
     @Test
@@ -34,6 +34,7 @@ public class ApplicationTest {
         verify(printStream).println("Welcome to Biblioteca!");
     }
 
+
     @Test
     public void shouldDisplayMainMenuWhenApplicationStarts() throws IOException {
         when(bufferedReader.readLine()).thenReturn("1");
@@ -42,21 +43,23 @@ public class ApplicationTest {
     }
 
     @Test
-    public void shouldListBooksWhenListBooksOptionIsChosen() throws IOException {
-        menu.show();
-        when(bufferedReader.readLine()).thenReturn("1");
-        application.processInput(bufferedReader);
-        verify(biblioteca).listBooks();
+    public void shouldDisplayInvalidOptionErrorWhenInvalidOptionIsChosen() throws IOException {
+        when(menu.processInput()).thenReturn(-1);
+        application.running();
+        verify(printStream).println("Select a valid option!");
     }
 
     @Test
-    public void shouldNotListBooksWhenListBooksOptionIsNotChosen() throws IOException {
-        menu.show();
-        BufferedReader bufferedReader = mock(BufferedReader.class);
-        when(bufferedReader.readLine()).thenReturn("2");
-        application.processInput(bufferedReader);
-        verify(biblioteca, times(0)).listBooks();
+    public void shouldDisplayMenuAgainAfterInvalidOptionChosen() throws IOException {
+        when(menu.processInput()).thenReturn(-1);
+        application.running();
+        verify(printStream).print(menu.show());
     }
 
+    @Test
+    public void shouldAcceptInputAfterInvalidInput() throws IOException {
+        when(menu.processInput()).thenReturn(-1);
+        verify(bufferedReader).readLine();
+    }
 
 }

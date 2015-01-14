@@ -11,7 +11,7 @@ public class Main {
         PrintStream printStream = System.out;
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
-        new Application(bufferedReader, printStream, createLibrary(printStream), new MainMenu()).start();
+        new Application(printStream, createLibrary(printStream), new MainMenu(bufferedReader)).start();
     }
 
     private static Biblioteca createLibrary(PrintStream printStream) {

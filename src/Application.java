@@ -7,13 +7,11 @@ import java.io.PrintStream;
  */
 public class Application {
 
-    private BufferedReader bufferedReader;
     private PrintStream printStream;
     private Biblioteca biblioteca;
     private MainMenu mainMenu;
 
-    public Application(BufferedReader bufferedReader, PrintStream printStream, Biblioteca biblioteca, MainMenu mainMenu) {
-        this.bufferedReader = bufferedReader;
+    public Application(PrintStream printStream, Biblioteca biblioteca, MainMenu mainMenu) {
         this.printStream = printStream;
         this.biblioteca = biblioteca;
         this.mainMenu = mainMenu;
@@ -22,15 +20,17 @@ public class Application {
     public void start() throws IOException {
         printStream.println("Welcome to Biblioteca!");
         printStream.print(mainMenu.show());
-        processInput(bufferedReader);
+        running();
     }
 
-    public void processInput(BufferedReader bufferedReader) throws IOException {
-        String userInput = bufferedReader.readLine();
+    public void running() throws IOException {
 
-        if (userInput.compareTo("1") == 0) {
-            biblioteca.listBooks();
+        Integer action = mainMenu.processInput();
+        if (action < 0) {
+            printStream.println("Select a valid option!");
         }
+        printStream.print(mainMenu.show());
 
     }
+
 }
