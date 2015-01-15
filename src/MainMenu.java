@@ -15,7 +15,8 @@ public class MainMenu {
     }
 
     public String show() {
-        return "1. List Books";
+        return "1. List Books \n2. Quit";
+
     }
 
     public Integer processInput() throws IOException {
@@ -23,6 +24,8 @@ public class MainMenu {
 
         if (userInput.compareTo("1") == 0) {
             return listBooksInput;
+        } else if(userInput.compareTo("2") == 0) {
+            return 2;
         } else {
             return invalidInput;
         }

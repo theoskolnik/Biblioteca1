@@ -12,14 +12,14 @@ public class ApplicationTest {
 
     private PrintStream printStream;
     private Application application;
-    private ArrayList<String> books;
+    private ArrayList<Book> books;
     private Biblioteca biblioteca;
     private MainMenu menu;
     private BufferedReader bufferedReader;
 
     @Before
     public void setUp() throws Exception {
-        books = new ArrayList<String>();
+        books = new ArrayList<Book>();
         printStream = mock(PrintStream.class);
         biblioteca = mock(Biblioteca.class);
         menu = mock(MainMenu.class);
@@ -43,6 +43,14 @@ public class ApplicationTest {
     }
 
     @Test
+    public  void shouldListBooksWhenListBooksOptionIsChosen() throws IOException {
+        when(biblioteca.listBooks()).thenReturn("books are listed");
+        when(menu.processInput()).thenReturn(1);
+        application.running();
+        verify(printStream).println("books are listed");
+    }
+
+    @Test
     public void shouldDisplayInvalidOptionErrorWhenInvalidOptionIsChosen() throws IOException {
         when(menu.processInput()).thenReturn(-1);
         application.running();
@@ -53,13 +61,14 @@ public class ApplicationTest {
     public void shouldDisplayMenuAgainAfterInvalidOptionChosen() throws IOException {
         when(menu.processInput()).thenReturn(-1);
         application.running();
-        verify(printStream).print(menu.show());
+        verify(printStream).println(menu.show());
     }
 
     @Test
     public void shouldAcceptInputAfterInvalidInput() throws IOException {
         when(menu.processInput()).thenReturn(-1);
-        verify(bufferedReader).readLine();
+        application.running();
+        verify(menu, times(2)).processInput();
     }
 
 }

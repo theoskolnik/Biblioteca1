@@ -7,16 +7,17 @@ import java.util.List;
  */
 public class Biblioteca {
     List<Book> books = new ArrayList<Book>();
-    private PrintStream printStream;
 
-    public Biblioteca(List<Book> books, PrintStream printStream) {
+    public Biblioteca(List<Book> books) {
         this.books = books;
-        this.printStream = printStream;
     }
 
-    public void listBooks() {
-        for (int i = 0; i < books.size(); i++) {
-            printStream.println(books.get(i).getInformation());
+    public String listBooks() {
+        String tempString = "";
+
+        for (Book book : books) {
+           tempString = tempString + book.getInformation() + "\n";
         }
+        return tempString;
     }
 }

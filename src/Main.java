@@ -23,7 +23,7 @@ public class Main {
         books.add(harryPotter);
         books.add(new Book("12345678901234567890", "12345678901234567890", "2014"));
 
-        Biblioteca biblioteca = new Biblioteca(books, printStream);
+        Biblioteca biblioteca = new Biblioteca(books);
         return biblioteca;
     }
 }

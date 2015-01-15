@@ -5,6 +5,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,15 +20,16 @@ public class BibliotecaTest {
     public void setUp() {
         books = new ArrayList<Book>();
         printStream = mock(PrintStream.class);
-        biblioteca = new Biblioteca(books, printStream);
+        biblioteca = new Biblioteca(books);
     }
 
     @Test
     public  void listsOneBookOnStart(){
         Book book = mock(Book.class);
+        when(book.getInformation()).thenReturn("Blah");
         books.add(book);
-        biblioteca.listBooks();
-        verify(printStream).println(book.getInformation());
+        String books = biblioteca.listBooks();
+        assertThat(books, is("Blah\n"));
     }
 
     @Test
@@ -39,10 +42,9 @@ public class BibliotecaTest {
         books.add(book);
         books.add(book2);
 
-        biblioteca.listBooks();
+        String books = biblioteca.listBooks();
 
-        verify(printStream).println(book.getInformation());
-        verify(printStream).println(book2.getInformation());
+        assertThat(books, is("123\n456\n"));
     }
 
 }

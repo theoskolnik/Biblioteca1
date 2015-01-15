@@ -19,17 +19,20 @@ public class Application {
 
     public void start() throws IOException {
         printStream.println("Welcome to Biblioteca!");
-        printStream.print(mainMenu.show());
+        printStream.println(mainMenu.show());
         running();
     }
 
     public void running() throws IOException {
 
         Integer action = mainMenu.processInput();
-        if (action < 0) {
+        if (action == -1) {
             printStream.println("Select a valid option!");
+            printStream.println(mainMenu.show());
+            mainMenu.processInput();
+        } else if(action == 1){
+            printStream.println(biblioteca.listBooks());
         }
-        printStream.print(mainMenu.show());
 
     }
 
