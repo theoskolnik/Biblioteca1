@@ -51,24 +51,10 @@ public class MainMenuTest {
     }
 
     @Test
-    public void shouldReturnAnInvalidEnumWhenUserInputIsInvalid() throws IOException {
-        menu.show();
-        when(bufferedReader.readLine()).thenReturn("98765");
-        Integer interpretationOfUserInput = menu.processInput();
-        assertThat(interpretationOfUserInput, is(-1));
-    }
-
-    @Test
      public void shouldTestIfQuitIsAMenuOption() {
         when(quitCommand.name()).thenReturn("Quit");
         String menuOutput = menu.show();
         assertThat(menuOutput.contains("Quit"), is(true));
-    }
-
-    @Test
-    public void shouldReturnTwoWhenUserSelectsQuit() throws IOException {
-        when(bufferedReader.readLine()).thenReturn("2");
-        assertThat(menu.processInput(), is(2));
     }
 
     @Test

@@ -22,11 +22,10 @@ public class ApplicationTest {
     public void setUp() throws Exception {
         books = new ArrayList<Book>();
         printStream = mock(PrintStream.class);
-        biblioteca = mock(Biblioteca.class);
         menu = mock(MainMenu.class);
         bufferedReader = mock(BufferedReader.class);
         quitter = mock(Quitter.class);
-        application = new Application(printStream, biblioteca, menu, quitter);
+        application = new Application(printStream, menu, quitter);
     }
 
 
@@ -48,43 +47,17 @@ public class ApplicationTest {
     }
 
     @Test
-    public void shouldDisplayInvalidOptionErrorWhenInvalidOptionIsChosen() throws IOException {
-        runApplicationOnce();
-        when(menu.processInput()).thenReturn(-1).thenReturn(2);
-        application.running();
-        verify(printStream).println("Select a valid option!");
-    }
-
-    @Test
     public void shouldDisplayMenuAgainAfterInvalidOptionChosen() throws IOException {
         runApplicationOnce();
-        when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(printStream).println(menu.show());
     }
 
     @Test
-    public void shouldAcceptInputAfterInvalidInput() throws IOException {
-        runApplicationOnce();
-        when(menu.processInput()).thenReturn(-1).thenReturn(2);
-        application.running();
-        verify(menu, times(2)).processInput();
-    }
-
-    @Test
     public void shouldAskUserForInputUntilUserSelectsQuitOption() throws IOException {
         runApplicationOnce();
-        when(menu.processInput()).thenReturn(1).thenReturn(2);
         application.running();
-        verify(menu, times(2)).processInput();
-    }
-
-    @Test
-    public void shouldPrintAQuitMessageWhenUserSelectsQuitOption() throws IOException {
-        runApplicationOnce();
-        when(menu.processInput()).thenReturn(2);
-        application.running();
-        verify(printStream).println("You've quit Biblioteca.");
+        verify(menu, times(1)).processInput();
     }
 
     @Test

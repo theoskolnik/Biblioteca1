@@ -15,13 +15,13 @@ public class Main {
 
         Biblioteca library = createLibrary(printStream);
         ListBooksCommand listBooksCommand = new ListBooksCommand(library, printStream);
-        QuitCommand quitCommand = new QuitCommand();
+        QuitCommand quitCommand = new QuitCommand(printStream);
         InvalidInputCommand invalidInputCommand = new InvalidInputCommand();
         Map<String, Command> menuCommands = new HashMap<String, Command>();
         menuCommands.put("1", listBooksCommand);
         menuCommands.put("2", quitCommand);
 
-        new Application(printStream, library, new MainMenu(bufferedReader, menuCommands, printStream), quitCommand).start();
+        new Application(printStream, new MainMenu(bufferedReader, menuCommands, printStream), quitCommand).start();
     }
 
     private static Biblioteca createLibrary(PrintStream printStream) {

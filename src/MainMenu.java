@@ -28,7 +28,7 @@ public class MainMenu {
         return returnString;
     }
 
-    public Integer processInput() throws IOException {
+    public void processInput() throws IOException {
         // List menu options here
 
 //        for (String key : menuCommands.keySet()) {
@@ -43,14 +43,13 @@ public class MainMenu {
 
         if (userInput.compareTo("1") == 0) {
             menuCommands.get(userInput).execute();
-            return listBooksInput;
+//            return listBooksInput;
         } else if (userInput.compareTo("2") == 0) {
             menuCommands.get(userInput).execute();
-            return quitInput;
+//            return quitInput;
         } else {
-            //invalidInputCommand.execute();
             printStream.println("Select a valid option!");
-            return invalidInput;
+//            return invalidInput;
         }
     }
 }
