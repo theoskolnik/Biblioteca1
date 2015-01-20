@@ -12,8 +12,10 @@ public class Main {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         Biblioteca library = createLibrary(printStream);
+        ListBooksCommand listBooksCommand = new ListBooksCommand(library, printStream);
+        QuitCommand quitCommand = new QuitCommand();
 
-        new Application(printStream, library, new MainMenu(bufferedReader, library)).start();
+        new Application(printStream, library, new MainMenu(bufferedReader, library, listBooksCommand, quitCommand)).start();
     }
 
     private static Biblioteca createLibrary(PrintStream printStream) {

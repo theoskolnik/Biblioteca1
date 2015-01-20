@@ -5,11 +5,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class MainMenuTest {
 
@@ -17,21 +14,23 @@ public class MainMenuTest {
     private BufferedReader bufferedReader;
     private Biblioteca biblioteca;
     private ListBooksCommand listBooksCommand;
+    private QuitCommand quitCommand;
 
     @Before
     public void SetUp(){
         bufferedReader= mock(BufferedReader.class);
         biblioteca = mock(Biblioteca.class);
-        menu = new MainMenu(bufferedReader, biblioteca);
         listBooksCommand = mock(ListBooksCommand.class);
+        quitCommand = mock(QuitCommand.class);
+        menu = new MainMenu(bufferedReader, biblioteca, listBooksCommand, quitCommand);
     }
 
-//    @Test
-//    public void shouldDisplayMenuWhenCalled(){
-//        MainMenu m = mock(MainMenu.class);
-//        when(m.show()).thenReturn("123");
-//        assertThat(m.show(), is("123"));
-//    }
+    @Test
+    public void shouldDisplayMenuWhenCalled(){
+        when(listBooksCommand.name()).thenReturn("List Books");
+        String menuString = menu.show();
+        assertThat(menuString, is("1. " + listBooksCommand.name() +  "\n"));
+    }
 
 
     @Test
@@ -48,17 +47,24 @@ public class MainMenuTest {
         Integer interpretationOfUserInput = menu.processInput();
         assertThat(interpretationOfUserInput, is(-1));
     }
-
-    @Test
-     public void shouldTestIfQuitIsAMenuOption() {
-        String menuOutput = menu.show();
-        assertEquals(menuOutput.contains("Quit"), true);
-    }
+//
+//    @Test
+//     public void shouldTestIfQuitIsAMenuOption() {
+//        String menuOutput = menu.show();
+//        assertEquals(menuOutput.contains("Quit"), true);
+//    }
 
     @Test
     public void shouldReturnTwoWhenUserSelectsQuit() throws IOException {
         when(bufferedReader.readLine()).thenReturn("2");
         assertThat(menu.processInput(), is(2));
+    }
+
+    @Test
+    public void shouldCallQuitCommandExecuteWhenUserSelectsQuit() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("2");
+        menu.processInput();
+        verify(quitCommand).execute();
     }
 
 }
