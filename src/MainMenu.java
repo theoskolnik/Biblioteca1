@@ -36,20 +36,10 @@ public class MainMenu {
 //        }
         String userInput = bufferedReader.readLine();
 //
-//        if(menuCommands.containsKey(userInput)){
-//            Command command = menuCommands.get(userInput);
-//            command.execute();
-//        }
-
-        if (userInput.compareTo("1") == 0) {
+        if(menuCommands.containsKey(userInput)) {
             menuCommands.get(userInput).execute();
-//            return listBooksInput;
-        } else if (userInput.compareTo("2") == 0) {
-            menuCommands.get(userInput).execute();
-//            return quitInput;
         } else {
             printStream.println("Select a valid option!");
-//            return invalidInput;
         }
     }
 }

@@ -58,7 +58,7 @@ public class MainMenuTest {
     }
 
     @Test
-    public void shouldCallQuitCommandExecuteWhenUserSelectsQuit() throws IOException {
+    public void shouldExecuteCommandWhenUserEntersValidCommandKey() throws IOException {
         when(bufferedReader.readLine()).thenReturn("2");
         menu.processInput();
         verify(quitCommand).execute();
@@ -66,6 +66,8 @@ public class MainMenuTest {
 
     @Test
     public void shouldCallInvalidUserInputCommandExecuteWhenUserEntersTheo() throws IOException {
+        // pass an empty map and select anything and print invalid message
+        // or pass a map that has something in it and call execute on mock
         when(bufferedReader.readLine()).thenReturn("Theo");
         menu.processInput();
         verify(printStream).println("Select a valid option!");
