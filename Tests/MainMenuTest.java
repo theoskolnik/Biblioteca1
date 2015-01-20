@@ -1,40 +1,44 @@
 import org.junit.Before;
 import org.junit.Test;
-import sun.jvm.hotspot.bugspot.BugSpot;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MainMenuTest {
 
     private MainMenu menu;
     private BufferedReader bufferedReader;
+    private Biblioteca biblioteca;
+    private ListBooksCommand listBooksCommand;
 
     @Before
     public void SetUp(){
         bufferedReader= mock(BufferedReader.class);
-        menu = new MainMenu(bufferedReader);
+        biblioteca = mock(Biblioteca.class);
+        menu = new MainMenu(bufferedReader, biblioteca);
+        listBooksCommand = mock(ListBooksCommand.class);
     }
-    @Test
-    public void shouldDisplayMenuWhenCalled(){
-        MainMenu m = mock(MainMenu.class);
-        when(m.show()).thenReturn("123");
-        assertThat(m.show(), is("123"));
-    }
+
+//    @Test
+//    public void shouldDisplayMenuWhenCalled(){
+//        MainMenu m = mock(MainMenu.class);
+//        when(m.show()).thenReturn("123");
+//        assertThat(m.show(), is("123"));
+//    }
 
 
     @Test
     public void shouldReturnListBooksEnumerationWhenListBooksOptionIsChosen() throws IOException {
-        menu.show();
         when(bufferedReader.readLine()).thenReturn("1");
-        Integer interpretationOfUserInput = menu.processInput();
-        assertThat(interpretationOfUserInput, is(1));
+        menu.processInput();
+        verify(listBooksCommand).execute();
     }
 
     @Test

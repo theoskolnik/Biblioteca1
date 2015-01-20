@@ -23,6 +23,7 @@ public class Application {
     }
 
     public void running() throws IOException {
+
         Integer action = mainMenu.processInput();
         while(action == 1 || action == -1) {
             if (action == -1) {

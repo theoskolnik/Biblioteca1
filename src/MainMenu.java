@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class MainMenu {
     private BufferedReader bufferedReader;
+    private Biblioteca biblioteca;
     private final Integer invalidInput = -1;
     private final Integer listBooksInput = 1;
     private final Integer quitInput = 2;
@@ -15,11 +16,14 @@ public class MainMenu {
 
     private Map<String, Command> menuCommands = new HashMap<String, Command>();
 
-    public MainMenu(BufferedReader bufferedReader) {
+
+    public MainMenu(BufferedReader bufferedReader, Biblioteca biblioteca) {
 
         this.bufferedReader = bufferedReader;
+        this.biblioteca = biblioteca;
 
-        menuCommands.put("1", new ListBooksCommand());
+        menuCommands.put("1", new ListBooksCommand(biblioteca));
+        menuCommands.put("2", new QuitCommand());
     }
 
     public String show() {

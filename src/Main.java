@@ -13,7 +13,7 @@ public class Main {
 
         Biblioteca library = createLibrary(printStream);
 
-        new Application(printStream, library, new MainMenu(bufferedReader)).start();
+        new Application(printStream, library, new MainMenu(bufferedReader, library)).start();
     }
 
     private static Biblioteca createLibrary(PrintStream printStream) {
