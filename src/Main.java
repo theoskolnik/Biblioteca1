@@ -3,7 +3,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -14,8 +16,12 @@ public class Main {
         Biblioteca library = createLibrary(printStream);
         ListBooksCommand listBooksCommand = new ListBooksCommand(library, printStream);
         QuitCommand quitCommand = new QuitCommand();
+        InvalidInputCommand invalidInputCommand = new InvalidInputCommand();
+        Map<String, Command> menuCommands = new HashMap<String, Command>();
+        menuCommands.put("1", listBooksCommand);
+        menuCommands.put("2", quitCommand);
 
-        new Application(printStream, library, new MainMenu(bufferedReader, library, listBooksCommand, quitCommand)).start();
+        new Application(printStream, library, new MainMenu(bufferedReader, menuCommands, printStream), quitCommand).start();
     }
 
     private static Biblioteca createLibrary(PrintStream printStream) {

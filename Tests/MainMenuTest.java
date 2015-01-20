@@ -3,6 +3,9 @@ import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -15,6 +18,8 @@ public class MainMenuTest {
     private Biblioteca biblioteca;
     private ListBooksCommand listBooksCommand;
     private QuitCommand quitCommand;
+    private InvalidInputCommand invalidInputCommand;
+    private PrintStream printStream;
 
     @Before
     public void SetUp(){
@@ -22,16 +27,21 @@ public class MainMenuTest {
         biblioteca = mock(Biblioteca.class);
         listBooksCommand = mock(ListBooksCommand.class);
         quitCommand = mock(QuitCommand.class);
-        menu = new MainMenu(bufferedReader, biblioteca, listBooksCommand, quitCommand);
+        invalidInputCommand = mock(InvalidInputCommand.class);
+        printStream = mock(PrintStream.class);
+        Map<String, Command> menuCommands = new HashMap<String, Command>();
+        menuCommands.put("1", listBooksCommand);
+        menuCommands.put("2", quitCommand);
+        menu = new MainMenu(bufferedReader, menuCommands, printStream);
     }
 
     @Test
     public void shouldDisplayMenuWhenCalled(){
         when(listBooksCommand.name()).thenReturn("List Books");
+        when(quitCommand.name()).thenReturn("Quit");
         String menuString = menu.show();
-        assertThat(menuString, is("1. " + listBooksCommand.name() +  "\n"));
+        assertThat(menuString, is("1. " + listBooksCommand.name() +  "\n2. " + quitCommand.name() + "\n"));
     }
-
 
     @Test
     public void shouldReturnListBooksEnumerationWhenListBooksOptionIsChosen() throws IOException {
@@ -47,12 +57,13 @@ public class MainMenuTest {
         Integer interpretationOfUserInput = menu.processInput();
         assertThat(interpretationOfUserInput, is(-1));
     }
-//
-//    @Test
-//     public void shouldTestIfQuitIsAMenuOption() {
-//        String menuOutput = menu.show();
-//        assertEquals(menuOutput.contains("Quit"), true);
-//    }
+
+    @Test
+     public void shouldTestIfQuitIsAMenuOption() {
+        when(quitCommand.name()).thenReturn("Quit");
+        String menuOutput = menu.show();
+        assertThat(menuOutput.contains("Quit"), is(true));
+    }
 
     @Test
     public void shouldReturnTwoWhenUserSelectsQuit() throws IOException {
@@ -65,6 +76,13 @@ public class MainMenuTest {
         when(bufferedReader.readLine()).thenReturn("2");
         menu.processInput();
         verify(quitCommand).execute();
+    }
+
+    @Test
+    public void shouldCallInvalidUserInputCommandExecuteWhenUserEntersTheo() throws IOException {
+        when(bufferedReader.readLine()).thenReturn("Theo");
+        menu.processInput();
+        verify(printStream).println("Select a valid option!");
     }
 
 }

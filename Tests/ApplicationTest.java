@@ -16,6 +16,7 @@ public class ApplicationTest {
     private Biblioteca biblioteca;
     private MainMenu menu;
     private BufferedReader bufferedReader;
+    private Quitter quitter;
 
     @Before
     public void setUp() throws Exception {
@@ -24,11 +25,14 @@ public class ApplicationTest {
         biblioteca = mock(Biblioteca.class);
         menu = mock(MainMenu.class);
         bufferedReader = mock(BufferedReader.class);
-        application = new Application(printStream, biblioteca, menu);
+        quitter = mock(Quitter.class);
+        application = new Application(printStream, biblioteca, menu, quitter);
     }
+
 
     @Test
     public void shouldPrintWelcomeWhenApplicationStarts() throws IOException {
+        runApplicationOnce();
         when(bufferedReader.readLine()).thenReturn("1");
         application.start();
         verify(printStream).println("Welcome to Biblioteca!");
@@ -37,21 +41,15 @@ public class ApplicationTest {
 
     @Test
     public void shouldDisplayMainMenuWhenApplicationStarts() throws IOException {
+        runApplicationOnce();
         when(bufferedReader.readLine()).thenReturn("1");
         application.start();
         verify(menu).show();
     }
 
     @Test
-    public  void shouldListBooksWhenListBooksOptionIsChosen() throws IOException {
-        when(biblioteca.listBooks()).thenReturn("books are listed");
-        when(menu.processInput()).thenReturn(1).thenReturn(2);
-        application.running();
-        verify(printStream).println("books are listed");
-    }
-
-    @Test
     public void shouldDisplayInvalidOptionErrorWhenInvalidOptionIsChosen() throws IOException {
+        runApplicationOnce();
         when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(printStream).println("Select a valid option!");
@@ -59,6 +57,7 @@ public class ApplicationTest {
 
     @Test
     public void shouldDisplayMenuAgainAfterInvalidOptionChosen() throws IOException {
+        runApplicationOnce();
         when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(printStream).println(menu.show());
@@ -66,6 +65,7 @@ public class ApplicationTest {
 
     @Test
     public void shouldAcceptInputAfterInvalidInput() throws IOException {
+        runApplicationOnce();
         when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(menu, times(2)).processInput();
@@ -73,6 +73,7 @@ public class ApplicationTest {
 
     @Test
     public void shouldAskUserForInputUntilUserSelectsQuitOption() throws IOException {
+        runApplicationOnce();
         when(menu.processInput()).thenReturn(1).thenReturn(2);
         application.running();
         verify(menu, times(2)).processInput();
@@ -80,10 +81,25 @@ public class ApplicationTest {
 
     @Test
     public void shouldPrintAQuitMessageWhenUserSelectsQuitOption() throws IOException {
+        runApplicationOnce();
         when(menu.processInput()).thenReturn(2);
         application.running();
         verify(printStream).println("You've quit Biblioteca.");
     }
 
+    @Test
+    public void shouldNeverCallProcessInputWhenApplicationDoneFlagIsTrue() throws IOException {
+        runApplicationZeroTimes();
+        application.running();
+        verify(menu, never()).processInput();
+    }
+
+    private void runApplicationZeroTimes() {
+        when(quitter.isApplicationDone()).thenReturn(true);
+    }
+
+    private void runApplicationOnce() {
+        when(quitter.isApplicationDone()).thenReturn(false).thenReturn(true);
+    }
 
 }

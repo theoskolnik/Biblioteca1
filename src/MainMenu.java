@@ -1,35 +1,31 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Map;
 
 /**
  * Created by tbartlett on 1/14/15.
  */
 public class MainMenu {
     private BufferedReader bufferedReader;
-    private Biblioteca biblioteca;
-    private ListBooksCommand listBooksCommand;
-    private QuitCommand quitCommand;
+    private Map<String, Command> menuCommands;
+    private PrintStream printStream;
     private final Integer invalidInput = -1;
     private final Integer listBooksInput = 1;
     private final Integer quitInput = 2;
 
-
-//    private Map<String, Command> menuCommands = new HashMap<String, Command>();
-
-
-    public MainMenu(BufferedReader bufferedReader, Biblioteca biblioteca, ListBooksCommand listBooksCommand, QuitCommand quitCommand) {
-
+    public MainMenu(BufferedReader bufferedReader, Map<String, Command> menuCommands, PrintStream printStream) {
         this.bufferedReader = bufferedReader;
-        this.biblioteca = biblioteca;
-        this.listBooksCommand = listBooksCommand;
-        this.quitCommand = quitCommand;
-
-//        menuCommands.put("1", new ListBooksCommand(biblioteca, printStream));
-//        menuCommands.put("2", new QuitCommand());
+        this.menuCommands = menuCommands;
+        this.printStream = printStream;
     }
 
     public String show() {
-        return "1. List Books\n";
+        String returnString = "";
+        for (String key : menuCommands.keySet()) {
+            returnString = key + ". " + menuCommands.get(key).name() + "\n" + returnString;
+        }
+        return returnString;
     }
 
     public Integer processInput() throws IOException {
@@ -46,12 +42,14 @@ public class MainMenu {
 //        }
 
         if (userInput.compareTo("1") == 0) {
-            listBooksCommand.execute();
+            menuCommands.get(userInput).execute();
             return listBooksInput;
-        } else if(userInput.compareTo("2") == 0) {
-            quitCommand.execute();
+        } else if (userInput.compareTo("2") == 0) {
+            menuCommands.get(userInput).execute();
             return quitInput;
         } else {
+            //invalidInputCommand.execute();
+            printStream.println("Select a valid option!");
             return invalidInput;
         }
     }

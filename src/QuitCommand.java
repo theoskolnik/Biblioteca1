@@ -1,7 +1,7 @@
 /**
  * Created by tskolnik on 1/20/15.
  */
-public class QuitCommand implements Command {
+public class QuitCommand implements Command, Quitter {
     @Override
     public void execute() {
 
@@ -9,6 +9,11 @@ public class QuitCommand implements Command {
 
     @Override
     public String name() {
-        return null;
+        return "Quit";
+    }
+
+    @Override
+    public boolean isApplicationDone() {
+        return false;
     }
 }
