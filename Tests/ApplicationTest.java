@@ -45,30 +45,45 @@ public class ApplicationTest {
     @Test
     public  void shouldListBooksWhenListBooksOptionIsChosen() throws IOException {
         when(biblioteca.listBooks()).thenReturn("books are listed");
-        when(menu.processInput()).thenReturn(1);
+        when(menu.processInput()).thenReturn(1).thenReturn(2);
         application.running();
         verify(printStream).println("books are listed");
     }
 
     @Test
     public void shouldDisplayInvalidOptionErrorWhenInvalidOptionIsChosen() throws IOException {
-        when(menu.processInput()).thenReturn(-1);
+        when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(printStream).println("Select a valid option!");
     }
 
     @Test
     public void shouldDisplayMenuAgainAfterInvalidOptionChosen() throws IOException {
-        when(menu.processInput()).thenReturn(-1);
+        when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(printStream).println(menu.show());
     }
 
     @Test
     public void shouldAcceptInputAfterInvalidInput() throws IOException {
-        when(menu.processInput()).thenReturn(-1);
+        when(menu.processInput()).thenReturn(-1).thenReturn(2);
         application.running();
         verify(menu, times(2)).processInput();
     }
+
+    @Test
+    public void shouldAskUserForInputUntilUserSelectsQuitOption() throws IOException {
+        when(menu.processInput()).thenReturn(1).thenReturn(2);
+        application.running();
+        verify(menu, times(2)).processInput();
+    }
+
+    @Test
+    public void shouldPrintAQuitMessageWhenUserSelectsQuitOption() throws IOException {
+        when(menu.processInput()).thenReturn(2);
+        application.running();
+        verify(printStream).println("You've quit Biblioteca.");
+    }
+
 
 }

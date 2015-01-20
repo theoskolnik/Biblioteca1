@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by tbartlett on 1/14/15.
@@ -8,10 +10,16 @@ public class MainMenu {
     private BufferedReader bufferedReader;
     private final Integer invalidInput = -1;
     private final Integer listBooksInput = 1;
+    private final Integer quitInput = 2;
+
+
+    private Map<String, Command> menuCommands = new HashMap<String, Command>();
 
     public MainMenu(BufferedReader bufferedReader) {
 
         this.bufferedReader = bufferedReader;
+
+        menuCommands.put("1", new ListBooksCommand());
     }
 
     public String show() {
@@ -20,12 +28,22 @@ public class MainMenu {
     }
 
     public Integer processInput() throws IOException {
+        // List menu options here
+
+        for (String key : menuCommands.keySet()) {
+            System.out.println(key + ". " + menuCommands.get(key).name() );
+        }
         String userInput = bufferedReader.readLine();
+
+        if(menuCommands.containsKey(userInput)){
+            Command command = menuCommands.get(userInput);
+            command.execute();
+        }
 
         if (userInput.compareTo("1") == 0) {
             return listBooksInput;
         } else if(userInput.compareTo("2") == 0) {
-            return 2;
+            return quitInput;
         } else {
             return invalidInput;
         }

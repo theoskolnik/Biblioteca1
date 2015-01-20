@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
 
@@ -24,16 +23,20 @@ public class Application {
     }
 
     public void running() throws IOException {
-
         Integer action = mainMenu.processInput();
-        if (action == -1) {
-            printStream.println("Select a valid option!");
-            printStream.println(mainMenu.show());
-            mainMenu.processInput();
-        } else if(action == 1){
-            printStream.println(biblioteca.listBooks());
+        while(action == 1 || action == -1) {
+            if (action == -1) {
+                printStream.println("Select a valid option!");
+                printStream.println(mainMenu.show());
+                action = mainMenu.processInput();
+            } else {
+                printStream.println(biblioteca.listBooks());
+                action = mainMenu.processInput();
+            }
         }
-
+        if (action == 2) {
+            printStream.println("You've quit Biblioteca.");
+        }
     }
 
 }
